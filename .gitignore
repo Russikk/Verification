@@ -1,0 +1,19 @@
+# EDA Simulation Tools & Artifacts
+*.log
+*.history
+*.key
+*.vcd
+*.shm/
+*.dsn
+*.trn
+simv*
+csrc/
+INCA_libs/
+xcelium.d/
+cov_work/
+*.db
+*.dir/
+
+# OS generated files
+.DS_Store
+.simvision/
