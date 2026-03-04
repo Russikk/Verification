@@ -41,4 +41,21 @@ class Transaction_Logic extends Transaction;
 
 endclass
 
+// RESERVED OPCODES (Negative Testing)
+class Transaction_Reserved extends Transaction;
+    // Перевизначаємо базове обмеження: генеруємо ТІЛЬКИ зарезервовані коди
+    constraint valid_op { 
+        opcode inside {[5:7]}; 
+    }
+    virtual function Transaction copy();
+        Transaction_Reserved tr = new();
+        tr.opcode = this.opcode;
+        tr.a = this.a;
+        tr.b = this.b;
+        tr.result = this.result;
+        tr.error = this.error;
+        return tr;
+    endfunction
+endclass
+
 `endif

@@ -11,8 +11,8 @@ class Transaction;
     constraint valid_op { opcode inside {[0:4]}; }
 
     function void display(string name);
-        $display("[%s] Op=%0d, A=%0d, B=%0d --> Res=%0d, Err=%0d", 
-                 name, opcode, a, b, result, error);
+        //$display("[%s] Op=%0d, A=%0d, B=%0d --> Res=%0d, Err=%0d", 
+                 //name, opcode, a, b, result, error);
     endfunction
 
     virtual function Transaction copy();

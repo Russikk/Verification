@@ -16,7 +16,7 @@ class Driver;
             Transaction tr;
             mbx.get(tr);// Блокуючий метод: очікує появи транзакції у скриньці
 
-            $display("[DRIVER] Sending: Op=%0d A=%0d B=%0d", tr.opcode, tr.a, tr.b);
+            //$display("[DRIVER] Sending: Op=%0d A=%0d B=%0d", tr.opcode, tr.a, tr.b);
  
             @(negedge vif.clk);
 
