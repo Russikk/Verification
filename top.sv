@@ -49,9 +49,8 @@ module top;
         intf_in_2.data = '0; intf_in_2.data_ready = 0;
         #30;
 
-        $display("\n===========================================");
-        $display("   RUNNING TEST 1: ARITHMETIC ONLY");
-        $display("===========================================");
+        //--------------------------- TEST 1
+	
         
         env = new(intf_in_0, intf_out_0, intf_out_1, intf_out_2, cfg_intf);// Створюємо середовище і передаємо йому віртуальні інтерфейси
         
@@ -60,12 +59,8 @@ module top;
         env.gen.count = 5000;
         
         env.run();// Запускаємо тест і чекаємо його завершення (блокуючий виклик)
-
-        #100;
-        $display("\n===========================================");
-        $display("   RUNNING TEST 2: LOGIC ONLY");
-        $display("===========================================");
-
+	env.scb.report("Arithmetic Analysis");
+        //--------------------------- TEST 2
         env = new(intf_in_0, intf_out_0, intf_out_1, intf_out_2, cfg_intf);
         
         tr_logic = new();
@@ -73,27 +68,19 @@ module top;
         env.gen.count = 5000;
         
         env.run();
-
-        #100;
-        $display("\n========================================");
-        $display(" RUNNING TEST 3: RESERVED OPCODES (ERROR INJECTION)");
-        $display("========================================");
+	env.scb.report("Logic Analysis");
+        // -------------------------- TEST 3
+	
     
-        // Перестворюємо середовище для чистого запуску
-        env = new(intf_in_0, intf_out_0, intf_out_1, intf_out_2, cfg_intf);
+        env = new(intf_in_0, intf_out_0, intf_out_1, intf_out_2, cfg_intf);// Перестворюємо середовище для чистого запуску
     
-        // Створюємо шаблон транзакції з помилками
         tr_reserved = new();
+   
+        env.gen.blueprint = tr_reserved;// Завантажуємо шаблон у генератор
+        env.gen.count = 200;  // Встановлюємо кількість ітерацій
     
-        // Завантажуємо шаблон у генератор
-        env.gen.blueprint = tr_reserved;
-    
-       // Встановлюємо кількість ітерацій (наприклад, 200 достатньо для 3 кодів)
-       env.gen.count = 200; 
-    
-       // Запускаємо тест
-       env.run();
-
+        env.run();
+	env.scb.report("Reserved Opcodes Analysis");
 
         
         $finish;

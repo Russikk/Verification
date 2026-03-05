@@ -80,19 +80,15 @@ class Environment;
             mon0.run();
             mon1.run();
             mon2.run();
-            scb.run();
             cov.run();
         join_none// Не чекаємо завершення
 
         wait(gen.done.triggered);// Чекаємо, поки генератор виставить подію done
         #10000000; 
         
-        scb.report();// Виводимо: Passed/Failed
-        //$finish;
     endtask
 
     task run();
-        //gen.count = 200; // Встановлюємо кількість тестів
         test();
     endtask
 
