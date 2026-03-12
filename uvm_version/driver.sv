@@ -1,34 +1,42 @@
-class Driver;
-    
-    mailbox mbx;// Канал зв'язку для отримання транзакцій
+class Driver extends uvm_driver #(Transaction);
+    `uvm_component_utils(Driver)
+    virtual simple_if vif;
+    virtual config_if cfg_vif;
 
-    virtual simple_if vif;// Віртуальний інтерфейс для доступу до сигналів DUT
-
-    function new(mailbox mbx, virtual simple_if vif);
-        this.mbx = mbx;
-        this.vif = vif;
+    function new(string name, uvm_component parent);
+        super.new(name, parent);
     endfunction
 
-    task run();
-        $display("[DRIVER] Started...");
+    function void build_phase(uvm_phase phase);
+        super.build_phase(phase);
+        if(!uvm_config_db#(virtual simple_if)::get(this, "", "vif", vif))
+            `uvm_fatal("DRV", "No simple_if")
+            
+        if(!uvm_config_db#(virtual config_if)::get(this, "", "cfg_vif", cfg_vif))
+            `uvm_fatal("DRV", "No config_if")
+    endfunction
+
+    virtual task run_phase(uvm_phase phase);
+    wait(vif.rst === 0);
+
+    @(posedge vif.clk); 
+
+    forever begin
+        seq_item_port.get_next_item(req); 
         
-        forever begin
-            Transaction tr;
-            mbx.get(tr);// Блокуючий метод: очікує появи транзакції у скриньці
+        cfg_vif.in0_to_comp = 2'b01;
 
-            //$display("[DRIVER] Sending: Op=%0d A=%0d B=%0d", tr.opcode, tr.a, tr.b);// для відладки
- 
-            @(negedge vif.clk);
+        @(posedge vif.clk);
 
-            vif.data = {tr.opcode, tr.a, tr.b, 5'b0};
-            vif.data_ready = 1; 
+        vif.data <= {req.opcode, req.a, req.b, 5'b0};
+        vif.data_ready <= 1'b1;
 
-            @(negedge vif.clk);
+        @(posedge vif.clk);
+        
+        vif.data_ready <= 1'b0;
+        vif.data <= '0;
 
-            vif.data_ready = 0;
-            vif.data       = 0;
-
-        end
-    endtask
-
+        seq_item_port.item_done(); 
+    end
+endtask
 endclass

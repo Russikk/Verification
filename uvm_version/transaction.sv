@@ -1,29 +1,31 @@
 `ifndef TRANSACTION_SV
 `define TRANSACTION_SV
 
-class Transaction;
+import uvm_pkg::*;
+`include "uvm_macros.svh"
+
+class Transaction extends uvm_sequence_item;
+
     rand bit [2:0] opcode;
-    randc bit [3:0] a;
-    randc bit [3:0] b;
+    rand bit [3:0] a;
+    rand bit [3:0] b;
     bit [3:0] result;
-    bit error;
+    bit       error;
 
-    constraint valid_op { opcode inside {[0:4]}; }
+    // UVM макроси для автоматизації (print, copy, compare)
+    `uvm_object_utils_begin(Transaction)
+        `uvm_field_int(opcode, UVM_ALL_ON)
+        `uvm_field_int(a,      UVM_ALL_ON)
+        `uvm_field_int(b,      UVM_ALL_ON)
+        `uvm_field_int(result, UVM_ALL_ON)
+        `uvm_field_int(error,  UVM_ALL_ON)
+    `uvm_object_utils_end
 
-    function void display(string name);
-        //$display("[%s] Op=%0d, A=%0d, B=%0d --> Res=%0d, Err=%0d", 
-                 //name, opcode, a, b, result, error);
+    function new(string name = "Transaction");
+        super.new(name);
     endfunction
 
-    virtual function Transaction copy();
-        Transaction tr_copy = new();
-        tr_copy.opcode = this.opcode;
-        tr_copy.a = this.a;
-        tr_copy.b = this.b;
-        tr_copy.result = this.result;
-        tr_copy.error = this.error;
-        return tr_copy;
-    endfunction
+    constraint c_op { opcode inside {[0:4]}; }
 
 endclass
 

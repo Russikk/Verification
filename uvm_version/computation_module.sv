@@ -38,7 +38,7 @@ module computation_module (
 
                 case (opcode_i)
                     3'd0: begin // ADD
-                        sum_full = a_i + b_i + 1; // ПОМИЛКА
+                        sum_full = a_i + b_i; // ПОМИЛКА
                         tmp_result = sum_full[3:0];
                         if (sum_full[4]) tmp_err = 1'b1;
                     end

@@ -8,7 +8,7 @@ TOOL = xrun
 # -coverage all: збір усіх типів покриття (code, functional)
 # -covoverwrite: дозволяє перезаписувати існуючу базу покриття
 # -sv: підтримка SystemVerilog
-FLAGS = -f filelist.f -gui -access +rwc -coverage all -covoverwrite -sv
+FLAGS = -f filelist.f -uvm -gui -access +rwc -coverage all -covoverwrite -sv
 
 # Команда за замовчуванням
 all: run
