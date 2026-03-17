@@ -16,7 +16,6 @@ module dispatcher (
         out_to_comp0.data       = '0;
         out_to_comp0.data_ready = 1'b0;
 
-        // Дивимось в налаштування (через інтерфейс cfg)
         if (cfg.in0_to_comp == 2'd0) begin
 
             out_to_comp0.data       = in0.data;

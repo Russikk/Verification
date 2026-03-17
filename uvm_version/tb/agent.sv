@@ -1,21 +1,14 @@
 `ifndef AGENT_SV
 `define AGENT_SV
 
-import uvm_pkg::*;
-`include "uvm_macros.svh"
-
-`include "transaction.sv"
-`include "driver.sv"
-`include "monitor.sv"
-
-typedef uvm_sequencer #(Transaction) Sequencer;
-
 class Agent extends uvm_agent;
     `uvm_component_utils(Agent)
 
     Driver    driver;
     Monitor   monitor;
     Sequencer sequencer;
+    
+    string    vif_tag; 
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
@@ -24,12 +17,18 @@ class Agent extends uvm_agent;
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         
-        monitor = Monitor::type_id::create("monitor", this);
+        if (!uvm_config_db#(string)::get(this, "", "vif_tag", vif_tag)) begin
+            `uvm_fatal("AGT", $sformatf("No vif_tag provided for agent: %s", get_full_name()))
+        end
 
-        // В UVM агент ACTIVE (з драйвером) або PASSIVE (тільки монітор)
+        monitor = Monitor::type_id::create("monitor", this);
+        uvm_config_db#(string)::set(this, "monitor", "vif_tag", vif_tag);
+
         if (get_is_active() == UVM_ACTIVE) begin
-            driver    = Driver::type_id::create("driver", this);
             sequencer = Sequencer::type_id::create("sequencer", this);
+            driver    = Driver::type_id::create("driver", this);
+            
+            uvm_config_db#(string)::set(this, "driver", "vif_tag", vif_tag);
         end
     endfunction
 

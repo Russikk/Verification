@@ -12,7 +12,6 @@ class Transaction extends uvm_sequence_item;
     bit [3:0] result;
     bit       error;
 
-    // UVM макроси для автоматизації (print, copy, compare)
     `uvm_object_utils_begin(Transaction)
         `uvm_field_int(opcode, UVM_ALL_ON)
         `uvm_field_int(a,      UVM_ALL_ON)
