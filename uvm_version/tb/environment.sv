@@ -18,7 +18,7 @@ class Environment extends uvm_env;
         for(int i=0; i<3; i++) begin
             in_ag[i]  = Agent::type_id::create($sformatf("in_ag_%0d", i), this);
             out_ag[i] = Agent::type_id::create($sformatf("out_ag_%0d", i), this);
-            
+            in_ag[i].vif_tag =  $sformatf("vif_in_%0d", i);
 
             uvm_config_db#(string)::set(this, $sformatf("in_ag_%0d*", i), "vif_tag", $sformatf("vif_in_%0d", i));
             uvm_config_db#(string)::set(this, $sformatf("out_ag_%0d*", i), "vif_tag", $sformatf("vif_out_%0d", i));
