@@ -3,8 +3,7 @@ TOOL = xrun
 FILELIST = filelist.f
 TOP_FILE = ../tb/top.sv
 
-FLAGS = -f $(FILELIST) -uvm -gui -access +rwc -coverage all -covoverwrite -sv
-
+FLAGS = -f filelist.f -uvm -gui -access +rwc -coverage all -covoverwrite -sv -snapshot top
 all: run
 
 run:
