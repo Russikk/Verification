@@ -7,6 +7,8 @@ package testbench_pkg;
     `include "driver.sv"
     `include "monitor.sv"
 
+    `include "coverage_collector.sv"
+
     typedef uvm_sequencer #(Transaction) Sequencer;
 
     `include "agent.sv"
